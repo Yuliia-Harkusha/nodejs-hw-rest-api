@@ -42,7 +42,7 @@ const removeContact = async (contactId) => {
   }
 };
 
-const addContact = async (name, email, phone) => {
+const addContact = async ({ name, email, phone }) => {
   try {
     const contacts = await listContacts();
     const newContact = { id: v4(), name, email, phone };

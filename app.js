@@ -4,8 +4,9 @@ const cors = require("cors");
 
 const mongoose = require("mongoose");
 
-const DB_HOST =
-  "mongodb+srv://user:Om0zAyVEylTZ9jCY@cluster0.uji2wrd.mongodb.net/db_contacts?retryWrites=true&w=majority";
+require("dotenv").config();
+
+const { DB_HOST } = process.env;
 
 mongoose
   .connect(DB_HOST)

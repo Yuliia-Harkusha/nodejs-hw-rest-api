@@ -1,4 +1,8 @@
-const { Contact, joiSchema, updateFavoriteSchema } = require("../models");
+const {
+  Contact,
+  contactJoiSchema,
+  updateFavoriteSchema,
+} = require("../models");
 const { HttpError } = require("../helpers");
 
 const listContacts = async (req, res, next) => {
@@ -27,7 +31,7 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const { error } = joiSchema.validate(req.body);
+    const { error } = contactJoiSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -56,7 +60,7 @@ const removeContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
-    const { error } = joiSchema.validate(req.body);
+    const { error } = contactJoiSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }

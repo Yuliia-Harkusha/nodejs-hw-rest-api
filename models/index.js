@@ -6,10 +6,10 @@ const {
 const { User, registerJoiSchema, loginJoiSchema } = require("./user");
 
 module.exports = {
-  Contact,
-  contactJoiSchema,
-  updateFavoriteSchema,
   User,
   registerJoiSchema,
   loginJoiSchema,
+  Contact,
+  contactJoiSchema,
+  updateFavoriteSchema,
 };

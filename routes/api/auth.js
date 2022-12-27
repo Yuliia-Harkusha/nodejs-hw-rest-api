@@ -11,4 +11,6 @@ router.get("/current", authenticate, ctrl.getCurrent);
 
 router.get("/logout", authenticate, ctrl.logout);
 
+router.patch("/:id/subscript", authenticate, ctrl.updateSubscription);
+
 module.exports = router;

@@ -1,6 +1,11 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { User, registerJoiSchema, loginJoiSchema } = require("../models");
+const {
+  User,
+  registerJoiSchema,
+  loginJoiSchema,
+  subscriptJoiSchema,
+} = require("../models");
 const { HttpError } = require("../helpers");
 const { SECRET_KEY } = process.env;
 
@@ -44,12 +49,13 @@ const login = async (req, res) => {
   };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   await User.findByIdAndUpdate(user._id, { token });
+  const { subscription } = user;
 
   res.status(200).json({
     token,
     user: {
       email: user.email,
-      subscription: "starter",
+      subscription,
     },
   });
 };
@@ -73,4 +79,22 @@ const logout = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, getCurrent, logout };
+const updateSubscription = async (req, res, next) => {
+  try {
+    const { error } = subscriptJoiSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+
+    const { id } = req.params;
+    const result = await User.findByIdAndUpdate(id, req.body, { new: true });
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { register, login, getCurrent, logout, updateSubscription };

@@ -52,10 +52,10 @@ const addContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { _id: owner } = req.user;
-    const result = await Contact.findOneAndDelete({ id, owner });
-
+    const result = await Contact.findOneAndDelete({
+      _id: req.params.id,
+      owner: req.user._id,
+    });
     if (!result) {
       throw HttpError(404, "Not found");
     }
@@ -73,12 +73,14 @@ const updateContact = async (req, res, next) => {
       throw HttpError(400, error.message);
     }
 
-    const { id } = req.params;
-    const { _id: owner } = req.user;
-
-    const result = await Contact.findOneAndUpdate({ id, owner }, req.body, {
-      new: true,
-    });
+    const result = await Contact.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        owner: req.user._id,
+      },
+      req.body,
+      { new: true }
+    );
     if (!result) {
       throw HttpError(404, "Not found");
     }

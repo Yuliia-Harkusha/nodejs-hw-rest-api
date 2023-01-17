@@ -40,7 +40,7 @@ const register = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify${verificationCode}">Click to verify your email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationCode}">Click to verify your email</a>`,
   };
   await sendEmail(verifyEmail);
 
@@ -161,7 +161,7 @@ const verify = async (req, res, next) => {
   }
 };
 
-export const resendVerifyEmail = async (req, res, next) => {
+const resendVerifyEmail = async (req, res, next) => {
   try {
     const { error } = emailJoiSchema.validate(req.body);
     if (error) {

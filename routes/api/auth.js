@@ -5,6 +5,8 @@ const { authenticate, upload } = require("../../middlewares");
 
 router.post("/register", ctrl.register);
 
+router.get("/verify/:verificationCode", ctrl.verify);
+
 router.post("/login", ctrl.login);
 
 router.get("/current", authenticate, ctrl.getCurrent);

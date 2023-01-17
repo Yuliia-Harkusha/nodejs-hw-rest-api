@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 const jwt = require("jsonwebtoken");
 const Jimp = require("jimp");
+const { nanoid } = require("nanoid");
 const fs = require("fs/promises");
 const path = require("path");
 const {
@@ -10,8 +11,8 @@ const {
   loginJoiSchema,
   subscriptJoiSchema,
 } = require("../models");
-const { HttpError } = require("../helpers");
-const { SECRET_KEY } = process.env;
+const { HttpError, sendEmail } = require("../helpers");
+const { SECRET_KEY, BASE_URL } = process.env;
 
 const register = async (req, res) => {
   const { error } = registerJoiSchema.validate(req.body);
@@ -26,11 +27,22 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
+  const verificationCode = nanoid();
+
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL,
+    verificationCode,
   });
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify${verificationCode}">Click to verify your email</a>`,
+  };
+  await sendEmail(verifyEmail);
+
   res.status(201).json({
     email: newUser.email,
     subscription: "starter",

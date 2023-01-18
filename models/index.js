@@ -8,12 +8,14 @@ const {
   registerJoiSchema,
   loginJoiSchema,
   subscriptJoiSchema,
+  emailJoiSchema,
 } = require("./user");
 
 module.exports = {
   User,
   registerJoiSchema,
   loginJoiSchema,
+  emailJoiSchema,
   Contact,
   contactJoiSchema,
   updateFavoriteSchema,
